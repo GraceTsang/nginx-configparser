@@ -153,6 +153,8 @@ bool NginxConfigParser::Parse(std::istream* config_file, NginxConfig* config) {
   TokenType last_token_type = TOKEN_TYPE_START;
   TokenType token_type;
   int block_depth = 0;
+  //block_depth keeps track of the nesting level of the current token
+  //and is used to ensure that braces match in valid configs
   while (true) {
     std::string token;
     token_type = ParseToken(config_file, &token);
@@ -215,7 +217,7 @@ bool NginxConfigParser::Parse(std::istream* config_file, NginxConfig* config) {
         break;
       }
       if (block_depth == 0)
-          return true;
+        return true;
     } else {
       // Error. Unknown token.
       break;
